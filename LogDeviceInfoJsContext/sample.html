@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+    <h1>Log device information ...</h1>
+    
+    <button id="button">Load network data</button>
+    
+    <div>
+        <span>Object type of:</span>
+        <span id="typeOfLabel"></span>
+    </div>
+    
+    <div>
+        <span>Device Id :</span>
+        <span id="deviceIdLabel"></span>
+    </div>
+    
+    <div>
+        <span>Device Name :</span>
+        <span id="deviceNameLabel"></span>
+    </div>
+    
+    <div>
+        <span>Username :</span>
+        <span id="usernameLabel"></span
+    </div>
+    
+    <div>
+        <span>Device system :</span>
+        <span id="deviceSystemLabel"></span>
+    </div>
+    
+    <div>
+        <span>Device System Version :</span>
+        <span id="deviceSystemVersion"></span>
+    </div>
+    <div>
+        <span>Network data</span>:
+        <span id="networkDataLabel"></span>
+    </div>
+
+    <script>
+        (function() {
+         var onClickHandler = function() {
+            document.getElementById('typeOfLabel').innerHTML = typeof deviceCollector;
+         
+            document.getElementById('deviceIdLabel').innerHTML = deviceCollector.deviceId;
+            document.getElementById('deviceNameLabel').innerHTML = deviceCollector.deviceName;
+            document.getElementById('usernameLabel').innerHTML = deviceCollector.username;
+            document.getElementById('deviceSystemLabel').innerHTML = deviceCollector.deviceSystem;
+            document.getElementById('deviceSystemVersion').innerHTML = deviceCollector.deviceSystemVersion;
+            document.getElementById('networkDataLabel').innerHTML = deviceCollector.ipAddress;
+         
+         }
+         
+         var button = document.getElementById('button');
+         
+         button.addEventListener('touchstart', onClickHandler);
+         button.addEventListener('click', onClickHandler);
+        })();
+    </script>
+</body>
+</html>
