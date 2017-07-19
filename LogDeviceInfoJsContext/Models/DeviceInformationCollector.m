@@ -21,7 +21,7 @@
 #import "IpAddress.h"
 
 @interface DeviceInformationCollector()
-@property (strong, nonatomic) NSMutableArray *ipAddresses;
+@property (strong, nonatomic) NSMutableArray *ipAddresses; // class IpAddress
 @end
 
 @implementation DeviceInformationCollector
@@ -31,7 +31,7 @@
 @synthesize username = _username;
 @synthesize deviceSystem = _deviceSystem;
 @synthesize deviceSystemVersion = _deviceSystemVersion;
-@synthesize ipAddress = _ipAddress;
+@synthesize networkAdapters = _networkAdapters;
 
 - (instancetype) init
 {
@@ -47,7 +47,7 @@
         // Ip addresses information
         self.ipAddresses = [self ipAddresses];
         
-        self.ipAddress = [DeviceInformationCollector convertIpAddressesToString:_ipAddresses];
+        self.networkAdapters = [DeviceInformationCollector createJSONByNetworkArray:_ipAddresses];
     }
     
     return self;
@@ -124,8 +124,6 @@
                     char host[NI_MAXHOST];
                     getnameinfo(addr, addr->sa_len, host, sizeof(host), NULL, 0, NI_NUMERICHOST);
                     
-                    
-                    
                     // NSString *string = "interface:%s, address:%s\n", interface->ifa_name, host;
                     printf("interface:%s, address:%s\n", interface->ifa_name, host);
                     
@@ -145,20 +143,51 @@
 }
 
 /*!
- * Method is receiving collection with Network IP addresses and convert them in sting wiht f
+ * Method is receiving collection with Network IP addresses and convert them in json string
  *
  * Source: https://stackoverflow.com/questions/12690622/detect-any-connected-network
- * \returns string with network data
+ * Source: https://stackoverflow.com/questions/22635742/how-to-convert-nsarray-of-nsstrings-into-json-string-ios
+ * Source: https://stackoverflow.com/questions/24630521/nsmutablearray-to-json-object
+ *
+ * \returns json  with network data
  */
-+ (NSMutableString *) convertIpAddressesToString:(NSMutableArray *)ipAddresses {
-    NSMutableString *networkData = [[NSMutableString alloc]init];
++ (NSString *) createJSONByNetworkArray:(NSArray *)networkArray
+{
+    NSString *jsonString = [[NSString alloc] init];
+    NSArray *items = [DeviceInformationCollector convertToDictonaryArray:networkArray];
     
-    for (IpAddress *ip in ipAddresses) {
-        // Generate interface information
-        [networkData appendString:[NSString stringWithFormat:@"interface:%@, address:%@ | ", ip.interface, ip.host]];
+    @try {
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:items
+                                                           options:kNilOptions
+                                                             error:&error];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        } else {
+            NSLog(@"Achtung! Failed to create JSON data: %@", [error localizedDescription]);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"{DeviceInformationCollectorException} Failed to create JSON data %@", exception.reason);
     }
     
-    return networkData;
+    NSLog(@"DeviceInformationCollectorJSON Data: %@", jsonString);
+    
+    return jsonString;
+}
+
++ (NSMutableArray *) convertToDictonaryArray:(NSArray *)networkArray
+{
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+
+    for (IpAddress *ip in networkArray) {
+        [items addObject: @{
+            @"interface": ip.interface,
+            @"host": ip.host
+        }];
+    }
+    
+    return items;
 }
 
 @end

@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *deviceSystem;
 @property (strong, nonatomic) NSString *deviceSystemVersion;
-@property (strong, nonatomic) NSString *ipAddress;
+@property (strong, nonatomic) NSString *networkAdapters;
 
 @end
 
@@ -27,7 +27,7 @@
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *deviceSystem;
 @property (strong, nonatomic) NSString *deviceSystemVersion;
-@property (strong, nonatomic) NSString *ipAddress;
+@property (strong, nonatomic) NSString *networkAdapters;
 
 + (NSMutableArray *) getIpAddresses;
 

@@ -53,7 +53,7 @@
     NSLog(@"Username -  %@", deviceCollector.username);
     NSLog(@"Device system - %@", deviceCollector.deviceSystem);
     NSLog(@"Device system version - %@", deviceCollector.deviceSystemVersion);
-    NSLog(@" ip address - %@", deviceCollector.ipAddress);
+    NSLog(@" ip address - %@", deviceCollector.networkAdapters);
     NSLog(@"----------- ");
 
     // get JSContext from UIWebView instance
