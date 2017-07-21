@@ -30,5 +30,6 @@
 @property (strong, nonatomic) NSString *networkAdapters;
 
 + (NSMutableArray *) getIpAddresses;
+- (NSString *) jsonSerialize;
 
 @end

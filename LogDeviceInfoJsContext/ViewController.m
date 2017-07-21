@@ -66,6 +66,7 @@
 
     
     context[@"deviceCollector"] = deviceCollector;
+    context[@"deviceInformationCollectorJSON"] = [deviceCollector jsonSerialize];
 }
 
 

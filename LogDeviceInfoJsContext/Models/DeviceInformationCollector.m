@@ -168,10 +168,12 @@
         }
     }
     @catch (NSException *exception) {
+        jsonString = @"{}";
+        
         NSLog(@"{DeviceInformationCollectorException} Failed to create JSON data %@", exception.reason);
     }
     
-    NSLog(@"DeviceInformationCollectorJSON Data: %@", jsonString);
+    NSLog(@"DeviceInformationCollectorJSON Adapter Data: %@", jsonString);
     
     return jsonString;
 }
@@ -188,6 +190,53 @@
     }
     
     return items;
+}
+
+/*!
+ * Method is serialize device information locator to json object
+ *
+ * Source: https://stackoverflow.com/questions/12690622/detect-any-connected-network
+ * Source: https://stackoverflow.com/questions/22635742/how-to-convert-nsarray-of-nsstrings-into-json-string-ios
+ * Source: https://stackoverflow.com/questions/24630521/nsmutablearray-to-json-object
+ *
+ * \returns json  with network data
+ */
+- (NSString *) jsonSerialize
+{
+    NSString *jsonString = [[NSString alloc] init];
+    
+    @try {
+        NSError *error = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject: [self convertDeviceLocatorToDictonary]
+                                                           options:kNilOptions
+                                                             error:&error];
+        if (jsonData) {
+            jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        } else {
+            NSLog(@"Achtung! Failed to create JSON data: %@", [error localizedDescription]);
+        }
+    }
+    @catch (NSException *exception) {
+        jsonString = @"{}";
+        
+        NSLog(@"{DeviceInformationCollectorException} Failed to create JSON data %@", exception.reason);
+    }
+    
+     NSLog(@"DeviceInformationCollectorJSON Data: %@", jsonString);
+    
+    return jsonString;
+}
+
+- (NSDictionary *) convertDeviceLocatorToDictonary
+{
+    return @{
+        @"deviceId": self.deviceId,
+        @"deviceName": self.deviceName,
+        @"username": self.username,
+        @"deviceSystem": self.deviceSystem,
+        @"deviceSystemVersion": self.deviceSystemVersion,
+        @"networkAdapters": self.networkAdapters
+    };
 }
 
 @end

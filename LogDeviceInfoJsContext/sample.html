@@ -39,6 +39,11 @@
         <span>Network data</span>:
         <span id="networkDataLabel"></span>
     </div>
+    
+    <div>
+        <div>Device Device Information Collector (JSON Format)</div>:
+        <span id="deviceInformationCollectorJSON"></span>
+    </div>
 
     <script>
         (function() {
@@ -52,6 +57,9 @@
             document.getElementById('deviceSystemVersion').innerHTML = deviceCollector.deviceSystemVersion;
             document.getElementById('networkDataLabel').innerHTML = deviceCollector.networkAdapters;
          
+            document.getElementById('deviceInformationCollectorJSON').innerHTML =
+                deviceInformationCollectorJSON;
+
          }
          
          var button = document.getElementById('button');
